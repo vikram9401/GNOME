@@ -29,6 +29,7 @@ import zipfile
 
 import console
 
+//General builder class
 class AddonBuilder():
     def __init__(self, config, src_dir=".", build_dir=".build"):
         self.config = config
@@ -45,6 +46,7 @@ class AddonBuilder():
         if not os.path.isdir(self.build_dir):
             os.makedirs(self.build_dir) # exist_ok=True
 
+//main
     def build(self):
         self.app_versions = []
 
@@ -68,6 +70,7 @@ class AddonBuilder():
 
         self._save_dependencies_cache(self.dependencies)
 
+//file processing method
     def _process_file(self, source):
         if source in ["chrome.manifest.in", "install.rdf.in"]:
             target = source[:-3]
@@ -144,6 +147,7 @@ class AddonBuilder():
             else:
                 self.result_files.append([os.path.join(self.src_dir, source), target])
 
+//checks for necessary updates
     def _is_need_update(self, target, source=None, dependencies=None):
         if self.config["force-rebuild"]:
             return True
@@ -169,7 +173,7 @@ class AddonBuilder():
         if target in self.dependencies:
             deps = deps + self.dependencies[target]
         return deps
-
+//helper installer method
     def _generate_install_manifest(self, source, target):
         source = os.path.join(self.src_dir, source)
         target = os.path.join(self.build_dir, target)
